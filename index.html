@@ -1,25 +1,555 @@
+<meta charset="UTF-8">
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.3/vue.js"></script>
 <script>
 	/* global Vue*/
 	var interval;
-	Vue.config.ignoredElements = ['playground', 'pixel'];
+	var count = 1;
+	var counter = function() { return count++ };
+	Vue.config.ignoredElements = ['playground', 'pixel', 'play', 'stop', 'scrollup', 'scrollvalue', 'scrolldown'];
 	new Vue({
 		data: {
 			dimensions: [39, 21],
-			frequency: 100,
+			age: 0,
+			frequency: 4,
+			scroll: 50,
 			pixels: [{
-				x: 30,
-				y: 5,
-				id: (() => Math.random())(),
+				x: 6,
+				y: 7,
+				id: counter(),
 				type: 'core',
 				f: 0.5
 			}, {
-				x: 14,
-				y: 6,
-				id: (() => Math.random())(),
+				x: 34,
+				y: 18,
+				id: counter(),
 				type: 'core',
 				f: 0.5
-			}]
+			}, {
+				x: 33,
+				y: 21,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 34,
+				y: 21,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 35,
+				y: 21,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 34,
+				y: 20,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 35,
+				y: 20,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 34,
+				y: 19,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 35,
+				y: 19,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 34,
+				y: 18,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 35,
+				y: 18,
+				id: counter(),
+				type: 'cancer',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 34,
+				y: 17,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 35,
+				y: 17,
+				id: counter(),
+				type: 'cancer',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 35,
+				y: 16,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 36,
+				y: 16,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 34,
+				y: 15,
+				id: counter(),
+				type: 'organelle',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 35,
+				y: 15,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 36,
+				y: 14,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 34,
+				y: 13,
+				id: counter(),
+				type: 'organelle',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 35,
+				y: 13,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 35,
+				y: 12,
+				id: counter(),
+				type: 'cancer',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 35,
+				y: 12,
+				id: counter(),
+				type: 'cancer',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 35,
+				y: 11,
+				id: counter(),
+				type: 'organelle',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 35,
+				y: 10,
+				id: counter(),
+				type: 'organelle',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 35,
+				y: 9,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 35,
+				y: 8,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 10,
+				y: 21,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 11,
+				y: 21,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 6,
+				y: 20,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 9,
+				y: 20,
+				id: counter(),
+				type: 'organelle',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 10,
+				y: 20,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 11,
+				y: 20,
+				id: counter(),
+				type: 'organelle',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 6,
+				y: 19,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 8,
+				y: 19,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 9,
+				y: 19,
+				id: counter(),
+				type: 'organelle',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 10,
+				y: 19,
+				id: counter(),
+				type: 'organelle',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 11,
+				y: 19,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 7,
+				y: 18,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 8,
+				y: 18,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 9,
+				y: 18,
+				id: counter(),
+				type: 'cancer',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 10,
+				y: 18,
+				id: counter(),
+				type: 'organelle',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 7,
+				y: 17,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 9,
+				y: 17,
+				id: counter(),
+				type: 'cancer',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 10,
+				y: 17,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 9,
+				y: 16,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 10,
+				y: 16,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 9,
+				y: 15,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 1,
+				y: 11,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 1,
+				y: 10,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 1,
+				y: 9,
+				id: counter(),
+				type: 'cancer',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 1,
+				y: 8,
+				id: counter(),
+				type: 'cancer',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 1,
+				y: 7,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 1,
+				y: 6,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 1,
+				y: 5,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 2,
+				y: 10,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 2,
+				y: 9,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 2,
+				y: 8,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 2,
+				y: 7,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 2,
+				y: 6,
+				id: counter(),
+				type: 'cancer',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 2,
+				y: 5,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 3,
+				y: 10,
+				id: counter(),
+				type: 'organelle',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 3,
+				y: 9,
+				id: counter(),
+				type: 'organelle',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 3,
+				y: 8,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 3,
+				y: 7,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 3,
+				y: 6,
+				id: counter(),
+				type: 'cancer',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 4,
+				y: 8,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 4,
+				y: 7,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 4,
+				y: 6,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 4,
+				y: 5,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 5,
+				y: 7,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 5,
+				y: 6,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 6,
+				y: 8,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 6,
+				y: 7,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 6,
+				y: 6,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 6,
+				y: 5,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 7,
+				y: 8,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, {
+				x: 7,
+				y: 9,
+				id: counter(),
+				type: 'cell',
+				f: 0.5,
+				age: 0
+			}, ]
 		},
 		computed: {
 			cores() {
@@ -34,6 +564,12 @@
 		},
 		mounted() {},
 		methods: {
+			hasneighbours(cx, cy) {
+				for (let i of this.pixels) {
+					if ((cx == i.x + 1 && cy == i.y + 1) || (cx == i.x - 1 && cy == i.y - 1) || (cx == i.x + 1 && cy == i.y - 1) || (cx == i.x - 1 && cy == i.y + 1) || (cx == i.x && cy == i.y + 1) || (cx == i.x && cy == i.y - 1) || (cx == i.x + 1 && cy == i.y) || (cx == i.x - 1 && cy == i.y)) return true;
+					return false;
+				}
+			},
 			makeGaussian2d(amplitude, x0, y0, sigmaX, sigmaY) {
 				return function(amplitude, x0, y0, sigmaX, sigmaY, x, y) {
 					var exponent = -(
@@ -47,17 +583,20 @@
 					return amplitude * Math.pow(Math.E, exponent);
 				}.bind(null, amplitude, origin, sigma);
 			},
-			getAge(cell) { return (new Date()).valueOf() - cell.birthday; },
 			moveCores() {
 				for (let i of this.pixels) {
 					if (i.type == 'core' && 0.2 - Math.random() > 0) {
-						let dist = this.makeGaussian(6, 0.5, 0.01);
-						i.x += dist(Math.random()) * (Math.random() >= 0.5 ? 1 : -1);
-						i.y += dist(Math.random()) * (Math.random() >= 0.5 ? 1 : -1);
+						let distg = this.makeGaussian(4, 0.5, 0.01);
+						i.x += distg(Math.random()) * (Math.random() >= 0.5 ? 1 : -1);
+						let c = (this.scroll / 100 - 0.5);
+						//let p = Math.abs(this.randnbm() / 2) ;
+						let dist = distg(Math.random()) * (Math.random() >= (0.5 + c) ? 1 : -1);
+						//console.log(dist > 0, c.toFixed(1));
+						i.y += dist;
 						i.x <= 2 && (i.x = 2 + Math.abs(i.x));
 						i.y <= 2 && (i.y = 2 + Math.abs(i.y));
-						i.x > (this.dimensions[0] - 4) && (i.x = i.x - (i.x - this.dimensions[0] + 4) * 2);
-						i.y > (this.dimensions[1] - 11) && (i.y = i.y - (i.y - this.dimensions[1] + 11) * 2);
+						i.x > (this.dimensions[0] - 1) && (i.x = i.x - (i.x - this.dimensions[0] + 1) * 2);
+						i.y > (this.dimensions[1] - 1) && (i.y = i.y - (i.y - this.dimensions[1] + 1) * 2);
 						i.x = Math.round(i.x);
 						i.y = Math.round(i.y);
 					}
@@ -66,13 +605,11 @@
 			grow() {
 				var newArray = this.pixels.slice();
 				for (let i of newArray) {
-					if (this.getAge(i) < 1000 || i.type == 'core') {
-						console.log(this.gaussfromcore(i.x, i.y) / 62, 'fert', i.f);
+					if (this.age - i.age < 20 || i.type == 'core') {
 						if (this.gaussfromcore(i.x, i.y) / 62 > i.f) {
 							let cx = i.x + (Math.random() >= 0.5 ? 1 : -1) * (Math.random() >= 0.5 ? 1 : 0);
 							let cy = i.y + (Math.random() >= 0.5 ? 1 : -1) * (Math.random() >= 0.5 ? 1 : 0);
-							if (this.getpixels(cx, cy).length < 3) {
-								console.log('growing cell', cx, cy);
+							if ((this.getpixels(cx, cy).length < 2) || i.type == 'core') {
 								this.makecell(cx, cy);
 							}
 						}
@@ -99,10 +636,16 @@
 			makecell(x, y) {
 				let rand = Math.random();
 				let type;
-				if (rand < 0.01) {
+				let orgp = (this.getpixel(x, y + 1).type == "organelle") * 0.6;
+				let canp = 0;
+				canp += (this.getpixel(x, y + 1).type == "cancer") * 0.20;
+				canp += (this.getpixel(x, y - 1).type == "cancer") * 0.20;
+				canp += (this.getpixel(x + 1, y).type == "cancer") * 0.20;
+				canp += (this.getpixel(x - 1, y + 1).type == "cancer") * 0.20;
+				if (rand < (0.01 + canp)) {
 					type = 'cancer';
 				}
-				else if (rand < 0.05) {
+				else if (rand < (0.05 + orgp)) {
 					type = 'organelle';
 				}
 				else {
@@ -112,9 +655,9 @@
 					type,
 					x,
 					y,
-					birthday: (new Date()).valueOf(),
-					id: (() => Math.random())(),
-					f: (() =>Math.abs(this.randnbm() / 2))(),
+					age: this.age,
+					id: counter(),
+					f: (() => Math.abs(this.randnbm() / 2))(),
 				});
 			},
 			getpixel(x, y) {
@@ -132,8 +675,9 @@
 			},
 			die() {
 				for (let i in this.pixels) {
-					if (i.type != 'core' && this.getAge(this.pixels[i]) > 5000) {
-						console.log('killing pixel');
+					let rand = this.randnbm();
+					if (i.type != 'core' && this.age - this.pixels[i].age > 3 && rand < .4 && rand > -.4 && this.gaussfromcore(this.pixels[i].x, this.pixels[i].y) < (62 - Math.abs(62 * rand / 2))) {
+						//console.log('killing cell');
 						Vue.delete(this.pixels, i);
 					}
 				}
@@ -142,6 +686,7 @@
 				this.moveCores();
 				this.grow();
 				this.die();
+				this.age++;
 			},
 			init() {
 				document.addEventListener('DOMContentLoaded', () => this.$mount('playground'));
@@ -157,9 +702,11 @@
 			},
 			start() {
 				interval = setInterval(this.tick, 10000 / this.frequency);
+				console.log('Started');
 			},
 			stop() {
 				clearInterval(interval);
+				console.log('Stop');
 			}
 		},
 		created() {
@@ -190,20 +737,57 @@
 	}
 
 	playground>[type="cell"] {
-		background: #888;
-		opacity: 0.2;
+		background: #d0cfcc;
 	}
 
 	playground>[type="cancer"] {
-		background: #ff0;
-		opacity: 0.3;
+		background: #ffbf27;
 	}
 
 	playground>[type="organelle"] {
-		background: #f00;
-		opacity: 0.8;
+		background: #f83c10;
+	}
+
+	play,
+	stop,
+	scrollup,
+	scrollvalue,
+	scrolldown {
+		position: fixed;
+		width: 5rem;
+		height: 5rem;
+		background: black;
+		color: #fff;
+		border-radius: 6rem;
+		right: 2rem;
+		top: 2rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		z-index: 1;
+	}
+
+	stop {
+		top: 8rem;
+	}
+
+	scrollup {
+		top: 14rem;
+	}
+
+	scrollvalue {
+		top: 20rem;
+	}
+
+	scrolldown {
+		top: 26rem;
 	}
 </style>
 <playground>
-	<pixel v-for="item in pixels" :x="item.x" :y="item.y" :type="item.type" :key="item.id"></pixel>
+	<play @click="start">Пуск</play>
+	<stop @click="stop">Стоп</stop>
+	<scrollup @click="scroll++">Вира</scrollup>
+	<scrollvalue>{{scroll}}</scrollvalue>
+	<scrolldown @click="scroll--">Майна</scrolldown>
+	<pixel v-if="item.x < dimensions[0]&&item.y < dimensions[1]&&item.x>0&&item.y>0" v-for="item in pixels" :x="item.x" :y="item.y" :type="item.type" :key="item.id"></pixel>
 </playground>
