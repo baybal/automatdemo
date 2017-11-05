@@ -1,0 +1,209 @@
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.3/vue.js"></script>
+<script>
+	/* global Vue*/
+	var interval;
+	Vue.config.ignoredElements = ['playground', 'pixel'];
+	new Vue({
+		data: {
+			dimensions: [39, 21],
+			frequency: 100,
+			pixels: [{
+				x: 30,
+				y: 5,
+				id: (() => Math.random())(),
+				type: 'core',
+				f: 0.5
+			}, {
+				x: 14,
+				y: 6,
+				id: (() => Math.random())(),
+				type: 'core',
+				f: 0.5
+			}]
+		},
+		computed: {
+			cores() {
+				let cores = [];
+				for (let i of this.pixels) {
+					if (i.type == 'core') {
+						cores.push(i);
+					}
+				}
+				return cores;
+			}
+		},
+		mounted() {},
+		methods: {
+			makeGaussian2d(amplitude, x0, y0, sigmaX, sigmaY) {
+				return function(amplitude, x0, y0, sigmaX, sigmaY, x, y) {
+					var exponent = -(
+						(Math.pow(x - x0, 2) / (2 * Math.pow(sigmaX, 2))) + (Math.pow(y - y0, 2) / (2 * Math.pow(sigmaY, 2))));
+					return amplitude * Math.pow(Math.E, exponent);
+				}.bind(null, amplitude, x0, y0, sigmaX, sigmaY);
+			},
+			makeGaussian(amplitude, origin, sigma) {
+				return function(amplitude, origin, sigma, val) {
+					var exponent = -(Math.pow(val - origin, 2) / (2 * Math.pow(sigma, 2)));
+					return amplitude * Math.pow(Math.E, exponent);
+				}.bind(null, amplitude, origin, sigma);
+			},
+			getAge(cell) { return (new Date()).valueOf() - cell.birthday; },
+			moveCores() {
+				for (let i of this.pixels) {
+					if (i.type == 'core' && 0.2 - Math.random() > 0) {
+						let dist = this.makeGaussian(6, 0.5, 0.01);
+						i.x += dist(Math.random()) * (Math.random() >= 0.5 ? 1 : -1);
+						i.y += dist(Math.random()) * (Math.random() >= 0.5 ? 1 : -1);
+						i.x <= 2 && (i.x = 2 + Math.abs(i.x));
+						i.y <= 2 && (i.y = 2 + Math.abs(i.y));
+						i.x > (this.dimensions[0] - 4) && (i.x = i.x - (i.x - this.dimensions[0] + 4) * 2);
+						i.y > (this.dimensions[1] - 11) && (i.y = i.y - (i.y - this.dimensions[1] + 11) * 2);
+						i.x = Math.round(i.x);
+						i.y = Math.round(i.y);
+					}
+				}
+			},
+			grow() {
+				var newArray = this.pixels.slice();
+				for (let i of newArray) {
+					if (this.getAge(i) < 1000 || i.type == 'core') {
+						console.log(this.gaussfromcore(i.x, i.y) / 62, 'fert', i.f);
+						if (this.gaussfromcore(i.x, i.y) / 62 > i.f) {
+							let cx = i.x + (Math.random() >= 0.5 ? 1 : -1) * (Math.random() >= 0.5 ? 1 : 0);
+							let cy = i.y + (Math.random() >= 0.5 ? 1 : -1) * (Math.random() >= 0.5 ? 1 : 0);
+							if (this.getpixels(cx, cy).length < 3) {
+								console.log('growing cell', cx, cy);
+								this.makecell(cx, cy);
+							}
+						}
+					}
+				}
+			},
+			gaussfromcore(x, y) {
+				let g = false;
+				for (let i of this.cores) {
+					let newg = this.makeGaussian2d(62, i.x, i.y, 3, 3)(x, y);
+					if (newg > g || g === false) {
+						g = newg;
+					}
+				}
+				return g;
+			},
+			randnbm() {
+				var u = 0,
+					v = 0;
+				while (u === 0) u = Math.random(); //Converting [0,1) to (0,1)
+				while (v === 0) v = Math.random();
+				return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+			},
+			makecell(x, y) {
+				let rand = Math.random();
+				let type;
+				if (rand < 0.01) {
+					type = 'cancer';
+				}
+				else if (rand < 0.05) {
+					type = 'organelle';
+				}
+				else {
+					type = 'cell';
+				}
+				this.pixels.push({
+					type,
+					x,
+					y,
+					birthday: (new Date()).valueOf(),
+					id: (() => Math.random())(),
+					f: (() =>Math.abs(this.randnbm() / 2))(),
+				});
+			},
+			getpixel(x, y) {
+				for (let i of this.pixels) {
+					if (i.x == x && i.y == y) return i;
+				}
+				return false;
+			},
+			getpixels(x, y) {
+				let arr = [];
+				for (let i of this.pixels) {
+					if (i.x == x && i.y == y) arr.push(i);
+				}
+				return arr;
+			},
+			die() {
+				for (let i in this.pixels) {
+					if (i.type != 'core' && this.getAge(this.pixels[i]) > 5000) {
+						console.log('killing pixel');
+						Vue.delete(this.pixels, i);
+					}
+				}
+			},
+			tick() {
+				this.moveCores();
+				this.grow();
+				this.die();
+			},
+			init() {
+				document.addEventListener('DOMContentLoaded', () => this.$mount('playground'));
+				let style = document.createElement("style");
+				document.head.appendChild(style);
+				for (let i = 0; i <= this.dimensions[0]; i++) {
+					style.sheet.insertRule('playground>[x="' + i + '"] {left: calc(100vmax / ' + this.dimensions[0] + ' * ' + i + ')}');
+				}
+				for (let i = 0; i <= this.dimensions[1]; i++) {
+					style.sheet.insertRule('playground>[y="' + i + '"] {bottom: calc(100vmax / ' + this.dimensions[1] + ' * ' + i * this.dimensions[1] / this.dimensions[0] + ')}');
+				}
+				style.sheet.insertRule('playground>*{position:absolute;width: calc(100vmax / ' + this.dimensions[0] + ');height: calc(100vmax / ' + this.dimensions[0] + ');transition: all ease-in-out ' + (5000 / this.frequency) + 'ms}');
+			},
+			start() {
+				interval = setInterval(this.tick, 10000 / this.frequency);
+			},
+			stop() {
+				clearInterval(interval);
+			}
+		},
+		created() {
+			this.init();
+			this.start();
+		}
+	});
+</script>
+<style>
+	body {
+		margin: 0;
+	}
+
+	playground {
+		height: 100%;
+		width: 100%;
+		position: relative;
+		display: block;
+	}
+
+	playground,
+	body {
+		overflow: hidden;
+	}
+
+	playground>[type="core"] {
+		background: #000
+	}
+
+	playground>[type="cell"] {
+		background: #888;
+		opacity: 0.2;
+	}
+
+	playground>[type="cancer"] {
+		background: #ff0;
+		opacity: 0.3;
+	}
+
+	playground>[type="organelle"] {
+		background: #f00;
+		opacity: 0.8;
+	}
+</style>
+<playground>
+	<pixel v-for="item in pixels" :x="item.x" :y="item.y" :type="item.type" :key="item.id"></pixel>
+</playground>
